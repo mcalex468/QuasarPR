@@ -10,14 +10,6 @@
 
         <div>Quasar v{{ $q.version }}</div>
 
-        <q-layout view="hHh lpR fFf">
-
-          <q-page-container>
-            <router-view />
-          </q-page-container>
-
-        </q-layout>
-
       </q-toolbar>
     </q-header>
 
