@@ -17,39 +17,15 @@ async function fetchItems() {
   }
 }
 
-// Obtener un elemento por ID desde el array local
-function getItemById(id) {
-  return localData.find(function (item) {
-    return item.id === id
-  })
-}
-
-// Crear un nuevo elemento en el array local
-function createItem(item) {
-  const newItem = { ...item, id: localData.length + 1 }
-  localData.push(newItem)
-  return newItem
-}
-
-// Actualizar un elemento en el array local
-function updateItem(id, updatedItem) {
-  for (let i = 0; i < localData.length; i++) {
-    if (localData[i].id === id) {
-      localData[i] = { ...localData[i], ...updatedItem }
-      return localData[i]
-    }
+// Obtener un elemento por ID
+async function fetchItemsId(id) {
+  try {
+    const response = await axios.get(`${API_URL}/${id}`)
+    return response.data // Aquí la API devuelve un objeto, no un array
+  } catch (error) {
+    console.error('Error fetching item by ID:', error)
+    return null
   }
-  return null
 }
 
-// Eliminar un elemento del array local
-function deleteItem(id) {
-  for (let i = 0; i < localData.length; i++) {
-    if (localData[i].id === id) {
-      return localData.splice(i, 1)[0]
-    }
-  }
-  return null
-}
-
-export { fetchItems, getItemById, createItem, updateItem, deleteItem }
+export { fetchItems, fetchItemsId }
