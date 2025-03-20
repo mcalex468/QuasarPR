@@ -1,53 +1,55 @@
-import axios from 'axios';
+import axios from 'axios'
 
-const API_URL = 'https://jsonplaceholder.typicode.com/posts';
+const API_URL = 'https://rickandmortyapi.com/api/location'
 
-export const getItems = async () => {
-    try {
-        const response = await axios.get(API_URL);
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching items:', error);
-        return [];
+// Array local para almacenar los datos
+let localData = []
+
+// Obtener todos los elementos de la API y almacenarlos localmente
+async function fetchItems() {
+  try {
+    const response = await axios.get(API_URL)
+    localData = response.data.results
+    return localData
+  } catch (error) {
+    console.error('Error fetching items:', error)
+    return []
+  }
+}
+
+// Obtener un elemento por ID desde el array local
+function getItemById(id) {
+  return localData.find(function (item) {
+    return item.id === id
+  })
+}
+
+// Crear un nuevo elemento en el array local
+function createItem(item) {
+  const newItem = { ...item, id: localData.length + 1 }
+  localData.push(newItem)
+  return newItem
+}
+
+// Actualizar un elemento en el array local
+function updateItem(id, updatedItem) {
+  for (let i = 0; i < localData.length; i++) {
+    if (localData[i].id === id) {
+      localData[i] = { ...localData[i], ...updatedItem }
+      return localData[i]
     }
-};
+  }
+  return null
+}
 
-export const getItemById = async (id) => {
-    try {
-        const response = await axios.get(`${API_URL}/${id}`);
-        return response.data;
-    } catch (error) {
-        console.error(`Error fetching item with ID ${id}:`, error);
-        return null;
+// Eliminar un elemento del array local
+function deleteItem(id) {
+  for (let i = 0; i < localData.length; i++) {
+    if (localData[i].id === id) {
+      return localData.splice(i, 1)[0]
     }
-};
+  }
+  return null
+}
 
-export const createItem = async (item) => {
-    try {
-        const response = await axios.post(API_URL, item);
-        return response.data;
-    } catch (error) {
-        console.error('Error creating item:', error);
-        return null;
-    }
-};
-
-export const updateItem = async (id, item) => {
-    try {
-        const response = await axios.put(`${API_URL}/${id}`, item);
-        return response.data;
-    } catch (error) {
-        console.error(`Error updating item with ID ${id}:`, error);
-        return null;
-    }
-};
-
-export const deleteItem = async (id) => {
-    try {
-        const response = await axios.delete(`${API_URL}/${id}`);
-        return response.data;
-    } catch (error) {
-        console.error(`Error deleting item with ID ${id}:`, error);
-        return null;
-    }
-};
+export { fetchItems, getItemById, createItem, updateItem, deleteItem }
