@@ -13,7 +13,7 @@
 <script>
 import { ref, computed, onMounted } from 'vue';
 import { getItems } from 'src/api.js';
-import SearchBar from 'src/components/SearchBar.vue';
+import SearchBar from 'src/components/Item/SearchBar.vue';
 export default {
     components: { SearchBar },
     setup() {
