@@ -1,5 +1,5 @@
 <script setup>
-import { useCharacters } from '../../api/useCharacters';
+import { useCharacters } from '../../api/api.js';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
