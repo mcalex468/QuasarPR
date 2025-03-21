@@ -1,31 +1,46 @@
+import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
 const API_URL = 'https://rickandmortyapi.com/api/location'
 
-// Array local para almacenar los datos
-let localData = []
+export function useCharacters() {
+  const characters = ref([])
+  const loading = ref(true)
+  const error = ref(null)
 
-// Obtener todos los elementos de la API y almacenarlos localmente
-async function fetchItems() {
-  try {
-    const response = await axios.get(API_URL)
-    localData = response.data.results
-    return localData
-  } catch (error) {
-    console.error('Error fetching items:', error)
-    return []
+  const fetchCharacters = async () => {
+    try {
+      const response = await axios.get(API_URL)
+      characters.value = response.data.results // API devuelve "results"
+    } catch (err) {
+      error.value = err
+    } finally {
+      loading.value = false
+    }
   }
+
+  onMounted(fetchCharacters)
+
+  return { characters, loading, error }
 }
 
-// Obtener un elemento por ID
-async function fetchItemsId(id) {
-  try {
-    const response = await axios.get(`${API_URL}/${id}`)
-    return response.data // Aquí la API devuelve un objeto, no un array
-  } catch (error) {
-    console.error('Error fetching item by ID:', error)
-    return null
-  }
-}
+export function useCharacter(id) {
+  const character = ref(null)
+  const loading = ref(true)
+  const error = ref(null)
 
-export { fetchItems, fetchItemsId }
+  const fetchCharacter = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/${id}`)
+      character.value = response.data
+    } catch (err) {
+      error.value = err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  onMounted(fetchCharacter)
+
+  return { character, loading, error }
+}

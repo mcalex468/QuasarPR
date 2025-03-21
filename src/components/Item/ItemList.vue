@@ -1,42 +1,32 @@
-<template>
-  <q-page padding>
-    <q-input v-model="search" label="Buscar localización..." outlined dense />
-
-    <q-table
-      :rows="filteredLocations"
-      :columns="columns"
-      row-key="id"
-      @row-click="selectItem"
-    />
-  </q-page>
-</template>
-
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { fetchItems } from "@/api/api.js";
+import { useCharacters } from '../../api/useCharacters';
+import { useRouter } from 'vue-router';
 
-const locations = ref([]);
-const search = ref("");
+const router = useRouter();
+const { characters, loading } = useCharacters();
 
 const columns = [
-  { name: "id", label: "ID", field: "id", align: "left" },
-  { name: "name", label: "Nombre", field: "name", align: "left" },
-  { name: "type", label: "Tipo", field: "type", align: "left" }
+  { name: 'name', label: 'Name', align: 'left', field: 'name' },
+  { name: 'type', label: 'Type', align: 'left', field: 'type' },
+  { name: 'dimension', label: 'Dimension', align: 'left', field: 'dimension' }
 ];
 
-const filteredLocations = computed(() =>
-  locations.value.filter((loc) =>
-    loc.name.toLowerCase().includes(search.value.toLowerCase())
-  )
-);
-
-async function loadLocations() {
-  locations.value = await fetchItems();
-}
-
-function selectItem(_, row) {
-  console.log("Seleccionado:", row);
-}
-
-onMounted(loadLocations);
+const viewDetails = (id) => {
+  router.push(`/item/${id}`);
+};
 </script>
+
+<template>
+  <q-page>
+    <q-table v-if="!loading" :rows="characters" :columns="columns" row-key="id">
+      <template v-slot:body-cell-name="props">
+        <q-td :props="props">
+          <q-btn flat dense color="primary" @click="viewDetails(props.row.id)">
+            {{ props.row.name }}
+          </q-btn>
+        </q-td>
+      </template>
+    </q-table>
+    <q-spinner v-else size="lg" color="primary" />
+  </q-page>
+</template>

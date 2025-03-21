@@ -1,33 +1,24 @@
+<script setup>
+import { useCharacter } from '../../api/useCharacters';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const { character, loading } = useCharacter(route.params.id);
+</script>
+
 <template>
-  <q-page padding>
-    <q-card v-if="item">
+  <q-page>
+    <q-card v-if="!loading && character">
       <q-card-section>
-        <div class="text-h5">{{ item.title }}</div>
-        <p>{{ item.body }}</p>
+        <div class="text-h5">{{ character.name }}</div>
+        <div><strong>Type:</strong> {{ character.type }}</div>
+        <div><strong>Dimension:</strong> {{ character.dimension }}</div>
+        <div><strong>Residents:</strong> {{ character.residents.length }}</div>
       </q-card-section>
     </q-card>
     <q-card v-else>
-      <q-card-section class="text-center text-grey">
-        Cargando o no encontrado...
-      </q-card-section>
+      <q-card-section>Loading character data...</q-card-section>
     </q-card>
+    <q-btn flat color="primary" @click="$router.back()" label="Back" />
   </q-page>
 </template>
-
-<script setup>
-import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
-import { getItemById } from "@/api/api.js";
-
-const route = useRoute();
-const item = ref(null);
-
-onMounted(async () => {
-  try {
-    item.value = await getItemById(route.params.id);
-  } catch (error) {
-    console.error("Error cargando el ítem:", error);
-    item.value = null;
-  }
-});
-</script>
