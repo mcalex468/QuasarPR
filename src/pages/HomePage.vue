@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import QCard from '../../src/components/QCard.vue';
+import QCard from '../components/QCard.vue';
 
 </script>
 
