@@ -1,11 +1,21 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/MainLayout.vue'),  // Usamos el layout principal
     children: [
-      { path: '', component: () => import('../pages/HomePage.vue') }, // Home como ruta raíz
-      { path: 'pokemons', component: () => import('../components/Item/ItemList.vue') },
-      { path: 'pokemon/:name', name: 'pokemon-detail', component: () => import('../components/Item/ItemDetail.vue') },
+      {
+        path: '',  // Página de inicio
+        component: () => import('../pages/HomePage.vue'),
+      },
+      {
+        path: 'pokemons',  // Lista de Pokémon
+        component: () => import('../components/Item/ItemList.vue'),
+      },
+      {
+        path: 'pokemon/:name',  // Detalle del Pokémon
+        name: 'pokemon-detail',
+        component: () => import('../components/Item/ItemDetail.vue'),
+      },
     ],
   },
 ];

@@ -22,8 +22,25 @@
         </div>
 
         <q-btn label="Ver Lista de Pokémon" color="primary" @click="goToPokemons" class="q-mt-md" />
+        <!-- Botón para abrir el modal -->
+        <q-btn label="Información Adicional" color="secondary" @click="showModal = true" class="q-mt-md" />
       </q-card-section>
     </q-card>
+
+    <!-- Modal (Diálogo) para mostrar información extra -->
+    <q-dialog v-model="showModal">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">¿Sabías que...?</div>
+          <p>Pokémon es un juego y serie famosa que ha capturado la imaginación de millones en todo el mundo. En esta
+            aplicación, puedes explorar tus Pokémon favoritos y conocer sus detalles.</p>
+        </q-card-section>
+
+        <q-card-actions>
+          <q-btn flat label="Cerrar" @click="showModal = false" color="primary" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -33,7 +50,7 @@ import { ref } from 'vue';
 
 const router = useRouter();
 
-// Array con las URLs de las 5 imágenes
+// Estado reactivo para la imagen seleccionada
 const pokemonImages = [
   'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png', // Pikachu
   'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png', // Charmander
@@ -42,10 +59,10 @@ const pokemonImages = [
   'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png', // Pidgey
 ];
 
-// Hacemos que pokemonImage sea reactiva
-const pokemonImage = ref(pokemonImages[0]); // Establecer la primera imagen por defecto
+const pokemonImage = ref(pokemonImages[0]); // Imagen predeterminada
+const showModal = ref(false); // Estado para mostrar el modal
 
-// Función para cambiar la imagen
+// Cambiar la imagen del Pokémon
 const changeImage = (index) => {
   pokemonImage.value = pokemonImages[index];
 };
