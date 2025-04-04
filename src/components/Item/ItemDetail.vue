@@ -1,9 +1,10 @@
 <script setup>
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router'; // Importa useRouter
 import { ref, onMounted } from 'vue';
 import { fetchPokemonDetails } from '../../api/api.js';
 
 const route = useRoute();
+const router = useRouter(); // Inicializa useRouter
 const pokemonName = route.params.name; // Obtener el nombre desde los parámetros de la ruta
 
 const pokemonDetail = ref(null);
@@ -17,6 +18,11 @@ const getPokemonDetail = async () => {
 };
 
 onMounted(getPokemonDetail);
+
+// Función para navegar hacia atrás a la lista de Pokémon
+const goBack = () => {
+  router.push('/pokemons'); // Asegúrate de que la ruta '/pokemon-list' sea la correcta en tu aplicación
+};
 </script>
 
 <template>
@@ -40,6 +46,11 @@ onMounted(getPokemonDetail);
           </ul>
         </div>
       </q-card-section>
+
+      <!-- Botón de retroceso -->
+      <q-card-actions>
+        <q-btn label="Back to List" @click="goBack" color="primary" />
+      </q-card-actions>
     </q-card>
   </q-page>
 </template>
