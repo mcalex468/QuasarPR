@@ -7,7 +7,7 @@
       </q-toolbar>
       <q-tabs align="left">
         <q-route-tab to="/">Home</q-route-tab>
-        <q-route-tab to="/items">Lista</q-route-tab>
+        <q-route-tab to="/pokemons">Lista de Pokémon</q-route-tab>
       </q-tabs>
     </q-header>
 
@@ -18,7 +18,7 @@
           <q-item-section avatar><q-icon name="home" /></q-item-section>
           <q-item-section>Home</q-item-section>
         </q-item>
-        <q-item clickable v-ripple to="/items">
+        <q-item clickable v-ripple to="/pokemons">
           <q-item-section avatar><q-icon name="list" /></q-item-section>
           <q-item-section>Lista</q-item-section>
         </q-item>

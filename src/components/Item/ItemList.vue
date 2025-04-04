@@ -1,32 +1,32 @@
 <script setup>
-import { useCharacters } from '../../api/api.js';
+import { fetchPokemons } from '../../api/api.js';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const { characters, loading } = useCharacters();
+const pokemons = ref([]);
+const loading = ref(true);
 
-const columns = [
-  { name: 'name', label: 'Name', align: 'left', field: 'name' },
-  { name: 'type', label: 'Type', align: 'left', field: 'type' },
-  { name: 'dimension', label: 'Dimension', align: 'left', field: 'dimension' }
-];
+onMounted(async () => {
+  pokemons.value = await fetchPokemons();
+  loading.value = false;
+});
 
-const viewDetails = (id) => {
-  router.push(`/item/${id}`);
+const goToDetail = (name) => {
+  router.push({ name: 'pokemon-detail', params: { id: name } });
 };
 </script>
 
 <template>
-  <q-page>
-    <q-table v-if="!loading" :rows="characters" :columns="columns" row-key="id">
-      <template v-slot:body-cell-name="props">
-        <q-td :props="props">
-          <q-btn flat dense color="primary" @click="viewDetails(props.row.id)">
-            {{ props.row.name }}
-          </q-btn>
-        </q-td>
-      </template>
-    </q-table>
-    <q-spinner v-else size="lg" color="primary" />
+  <q-page padding>
+    <q-card v-if="loading">
+      <q-card-section>Loading Pokémon list...</q-card-section>
+    </q-card>
+
+    <q-list v-else bordered separator>
+      <q-item v-for="(pokemon, index) in pokemons" :key="index" clickable @click="goToDetail(pokemon.name)">
+        <q-item-section>{{ pokemon.name }}</q-item-section>
+      </q-item>
+    </q-list>
   </q-page>
 </template>

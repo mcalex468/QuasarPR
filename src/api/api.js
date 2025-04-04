@@ -1,46 +1,33 @@
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import axios from 'axios';
 
-const API_URL = 'https://rickandmortyapi.com/api/location'
+const API_URL = 'https://pokeapi.co/api/v2/pokemon?limit=10000';
 
-export function useCharacters() {
-  const characters = ref([])
-  const loading = ref(true)
-  const error = ref(null)
+// Arrays locales para almacenar los datos
+let localData = [];
+let pokemonDetails = {}; // Objeto para almacenar detalles de un Pokémon específico
 
-  const fetchCharacters = async () => {
-    try {
-      const response = await axios.get(API_URL)
-      characters.value = response.data.results // API devuelve "results"
-    } catch (err) {
-      error.value = err
-    } finally {
-      loading.value = false
-    }
+// Obtener todos los Pokémon y almacenarlos localmente
+async function fetchPokemons() {
+  try {
+    const response = await axios.get(API_URL);
+    localData = response.data.results;
+    return localData;
+  } catch (error) {
+    console.error('Error al obtener la lista de Pokémon:', error);
+    return [];
   }
-
-  onMounted(fetchCharacters)
-
-  return { characters, loading, error }
 }
 
-export function useCharacter(id) {
-  const character = ref(null)
-  const loading = ref(true)
-  const error = ref(null)
-
-  const fetchCharacter = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/${id}`)
-      character.value = response.data
-    } catch (err) {
-      error.value = err
-    } finally {
-      loading.value = false
-    }
+// Obtener detalles de un Pokémon por ID o nombre y almacenarlos localmente
+async function fetchPokemonDetails(identifier) {
+  try {
+    const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${identifier}`);
+    pokemonDetails = response.data;
+    return pokemonDetails;
+  } catch (error) {
+    console.error('Error al obtener detalles del Pokémon:', error);
+    return null;
   }
-
-  onMounted(fetchCharacter)
-
-  return { character, loading, error }
 }
+
+export { fetchPokemons, fetchPokemonDetails, localData, pokemonDetails };
